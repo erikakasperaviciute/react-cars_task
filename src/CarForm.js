@@ -93,6 +93,7 @@ const CarForm = (props) => {
           type="text"
           id="brand"
           name="brand"
+          required
           value={brand}
           onChange={brandInputHandler}
         />
@@ -103,6 +104,7 @@ const CarForm = (props) => {
           type="text"
           id="model"
           name="model"
+          required
           value={model}
           onChange={modelInputHandler}
         />
@@ -128,6 +130,7 @@ const CarForm = (props) => {
           id="base-price"
           name="base-price"
           min="0"
+          required
           value={basePrice}
           onChange={basePriceInputHandler}
         />

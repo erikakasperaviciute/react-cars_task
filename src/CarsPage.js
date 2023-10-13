@@ -7,8 +7,16 @@ function CarsPage() {
   const [cars, setCars] = useState(carsData);
   const addNewCar = (newCar) => setCars((prevState) => [newCar, ...prevState]);
   const carsListElement = cars.map((car, index) => (
-    <CarItem key={index} data={car} />
+    <CarItem key={index} data={car} onDelete={() => handleDeleteCar(index)} />
   ));
+
+  const handleDeleteCar = (index) => {
+    setCars((prevState) => {
+      const updatedCars = [...prevState];
+      updatedCars.splice(index, 1);
+      return updatedCars;
+    });
+  };
   return (
     <>
       <CarForm onNewCar={addNewCar} />

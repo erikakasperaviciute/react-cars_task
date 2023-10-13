@@ -12,6 +12,7 @@ const CarItem = (props) => {
     mileageDiscount,
     discount,
   } = props.data;
+  const { onDelete } = props;
 
   if (!brand || !model || !basePrice) {
     return null;
@@ -58,9 +59,10 @@ const CarItem = (props) => {
       <p>{carColor}</p>
       {discountsElement}
       <h4>Total:</h4>
-      <p>Final price: {priceAfterMileageDiscount.toFixed(2)}</p>
+      <p>Final price: {priceAfterMileageDiscount.toFixed(2)} Eur.</p>
       <p>PVM: {pvmTaxes.toFixed(2)} Eur.</p>
       <p>Final price including PVM: {finalPriceWithTaxes.toFixed(2)} Eur.</p>
+      <button onClick={onDelete}>Delete</button>
     </div>
   );
 };
