@@ -1,3 +1,5 @@
+import { firstLetterUpperCase } from "./utils";
+
 const CarItem = (props) => {
   const {
     brand,
@@ -12,7 +14,7 @@ const CarItem = (props) => {
     mileageDiscount,
     discount,
   } = props.data;
-  const { onDelete } = props;
+  const { onDelete, editCarHandler, index } = props;
 
   if (!brand || !model || !basePrice) {
     return null;
@@ -32,9 +34,9 @@ const CarItem = (props) => {
   const basePriceElement = `Base price: ${basePrice} eur.`;
   const imageElement = image && <img src={image} alt="car" />;
 
-  const carEngineInfo = `Engine type: ${engineType
-    .at(0)
-    .toUpperCase()}${engineType.slice(1)} - ${additionalEngineCost} Eur.`;
+  const carEngineInfo = `Engine type: ${firstLetterUpperCase(
+    engineType
+  )} - ${additionalEngineCost} Eur.`;
   const carMileageInfo = `Mileage: ${mileage} km.`;
   const carColor = `Color: ${color} - ${additionalColorCost} Eur.`;
 
@@ -63,6 +65,7 @@ const CarItem = (props) => {
       <p>PVM: {pvmTaxes.toFixed(2)} Eur.</p>
       <p>Final price including PVM: {finalPriceWithTaxes.toFixed(2)} Eur.</p>
       <button onClick={onDelete}>Delete</button>
+      <button onClick={() => editCarHandler(index)}>Edit</button>
     </div>
   );
 };

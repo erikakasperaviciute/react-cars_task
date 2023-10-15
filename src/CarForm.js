@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const CarForm = (props) => {
-  const { onNewCar } = props;
+  const { onNewCar, editCarData } = props;
 
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
@@ -12,12 +12,25 @@ const CarForm = (props) => {
   const [image, setImage] = useState("");
   const [discount, setDiscount] = useState("");
 
+  useEffect(() => {
+    if (editCarData) {
+      setBrand(editCarData.brand);
+      setModel(editCarData.model);
+      setEngineType(editCarData.engineType);
+      setBasePrice(editCarData.basePrice);
+      setMileage(editCarData.mileage);
+
+      setSelectedColor(editCarData.color);
+      setOtherColor(editCarData.otherColor);
+
+      setImage(editCarData.image);
+      setDiscount(editCarData.discount);
+    }
+  }, [editCarData]);
+
   const newCarHandler = (e) => {
     e.preventDefault();
-    const pickedColor =
-      selectedColor === "other"
-        ? `${otherColor.charAt(0).toUpperCase()}${otherColor.slice(1)}`
-        : `${selectedColor.charAt(0).toUpperCase()}${selectedColor.slice(1)}`;
+    const pickedColor = selectedColor === "other" ? otherColor : selectedColor;
 
     let additionalEngineCost = 0;
     if (engineType === "electric") {
@@ -197,7 +210,10 @@ const CarForm = (props) => {
           onChange={discountInputHandler}
         />
       </div>
-      <input type="submit" value="Add Car" />
+      <input
+        type="submit"
+        value={editCarData ? "Save edited car" : "Add new car"}
+      />
     </form>
   );
 };
