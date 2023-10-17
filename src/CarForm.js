@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { useState, useEffect } from "react";
 const CarForm = (props) => {
   const { onNewCar, editCarData } = props;
@@ -62,6 +63,7 @@ const CarForm = (props) => {
     }
 
     const newCar = {
+      id: editCarData ? editCarData.id : uuid(),
       brand,
       model,
       engineType,

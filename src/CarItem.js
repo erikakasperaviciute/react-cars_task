@@ -2,6 +2,7 @@ import { firstLetterUpperCase } from "./utils";
 
 const CarItem = (props) => {
   const {
+    id,
     brand,
     model,
     engineType,
@@ -14,7 +15,7 @@ const CarItem = (props) => {
     mileageDiscount,
     discount,
   } = props.data;
-  const { onDelete, editCarHandler, index } = props;
+  const { onDelete, onEdit, index } = props;
 
   if (!brand || !model || !basePrice) {
     return null;
@@ -64,8 +65,8 @@ const CarItem = (props) => {
       <p>Final price: {priceAfterMileageDiscount.toFixed(2)} Eur.</p>
       <p>PVM: {pvmTaxes.toFixed(2)} Eur.</p>
       <p>Final price including PVM: {finalPriceWithTaxes.toFixed(2)} Eur.</p>
-      <button onClick={onDelete}>Delete</button>
-      <button onClick={() => editCarHandler(index)}>Edit</button>
+      <button onClick={() => onDelete(id)}>Delete</button>
+      <button onClick={() => onEdit(id)}>Edit</button>
     </div>
   );
 };

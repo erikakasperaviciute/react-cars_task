@@ -5,44 +5,46 @@ import CarItem from "./CarItem";
 function CarsPage() {
   const carsData = [];
   const [cars, setCars] = useState(carsData);
-  const [editCarIndex, setEditCarIndex] = useState(null);
-  const [editCar, setEditCar] = useState(null);
+  const [editCarData, setEditCarData] = useState(null);
 
-  const carsListElement = cars.map((car, index) => (
-    <CarItem
-      key={index}
-      data={car}
-      onDelete={() => handleDeleteCar(index)}
-      editCarHandler={() => editCarHandler(index)}
-    />
-  ));
-
-  const handleDeleteCar = (index) => {
+  const handleDeleteCar = (carId) => {
     setCars((prevState) => {
-      const updatedCars = [...prevState];
-      updatedCars.splice(index, 1);
-      return updatedCars;
+      prevState.filter((car) => car.id === carId);
     });
   };
 
   const carsUpdateHandler = (newCar) => {
-    if (editCar) {
-      setCars((prevState) => prevState.toSpliced(editCarIndex, 1, newCar));
-      setEditCar(null);
-      setEditCarIndex(null);
+    if (editCarData) {
+      setCars((prevState) => {
+        const editId = newCar.id;
+        const editIndex = cars.findIndex((car) => car.id === editId);
+        const newState = [...prevState];
+        newState[editIndex] = newCar;
+        return newState;
+      });
+      setEditCarData(null);
     } else {
       setCars((prevState) => [newCar, ...prevState]);
     }
   };
 
-  const editCarHandler = (index) => {
-    setEditCar(cars[index]);
-    setEditCarIndex(index);
+  const editCarHandler = (carId) => {
+    const carToEdit = cars.find((car) => car.id === carId);
+    setEditCarData(carToEdit);
   };
+
+  const carsListElement = cars.map((car, index) => (
+    <CarItem
+      key={index}
+      data={car}
+      onDelete={handleDeleteCar}
+      onEdit={editCarHandler}
+    />
+  ));
 
   return (
     <>
-      <CarForm onNewCar={carsUpdateHandler} editCarData={editCar} />
+      <CarForm onNewCar={carsUpdateHandler} editCarData={editCarData} />
       <div className="car-list">{carsListElement}</div>
     </>
   );
