@@ -3,6 +3,16 @@ import { useState, useEffect } from "react";
 const CarForm = (props) => {
   const { onNewCar, editCarData } = props;
 
+  const colorOptions = [
+    "black",
+    "red",
+    "blue",
+    "silver",
+    "white",
+    "special blue",
+    "other",
+  ];
+
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [engineType, setEngineType] = useState("electric");
@@ -13,16 +23,24 @@ const CarForm = (props) => {
   const [image, setImage] = useState("");
   const [discount, setDiscount] = useState("");
 
+  const colorHandler = (e) => setSelectedColor(e.target.value);
+  const otherColorHandler = (e) => setOtherColor(e.target.value);
+
   useEffect(() => {
     if (editCarData) {
+      const { otherColor } = editCarData;
       setBrand(editCarData.brand);
       setModel(editCarData.model);
       setEngineType(editCarData.engineType);
       setBasePrice(editCarData.basePrice);
       setMileage(editCarData.mileage);
 
-      setSelectedColor(editCarData.color);
-      setOtherColor(editCarData.otherColor);
+      if (otherColor) {
+        setSelectedColor("other");
+        setOtherColor(editCarData.color);
+      } else {
+        setSelectedColor(editCarData.color);
+      }
 
       setImage(editCarData.image);
       setDiscount(editCarData.discount);
@@ -70,6 +88,7 @@ const CarForm = (props) => {
       basePrice,
       mileage,
       color: pickedColor,
+      otherColor: selectedColor === "other",
       image,
       additionalEngineCost,
       additionalColorCost,
@@ -93,10 +112,10 @@ const CarForm = (props) => {
   const engineTypeHandler = (e) => setEngineType(e.target.value);
   const basePriceInputHandler = (e) => setBasePrice(e.target.valueAsNumber);
   const mileageInputHandler = (e) => setMileage(e.target.valueAsNumber);
-  const colorHandler = (e) => {
-    setSelectedColor(e.target.value);
-  };
-  const otherColorHandler = (e) => setOtherColor(e.target.value);
+  // const colorHandler = (e) => {
+  //   setSelectedColor(e.target.value);
+  // };
+  // const otherColorHandler = (e) => setOtherColor(e.target.value);
   const imageHandler = (e) => setImage(e.target.value);
   const discountInputHandler = (e) => setDiscount(e.target.valueAsNumber);
 
@@ -166,25 +185,24 @@ const CarForm = (props) => {
         <select
           id="color"
           name="color"
-          value={selectedColor}
           onChange={colorHandler}
+          value={selectedColor}
         >
-          <option value="black">Black</option>
-          <option value="red">Red</option>
-          <option value="blue">Blue</option>
-          <option value="silver">Silver</option>
-          <option value="white">White</option>
-          <option value="special blue">Special Blue</option>
-          <option value="other">Other</option>
+          {colorOptions.map((color, index) => (
+            <option key={index} value={color}>
+              {color}
+            </option>
+          ))}
         </select>
       </div>
+
       {selectedColor === "other" && (
         <div className="form-control">
-          <label htmlFor="other-color">Enter custom color:</label>
+          <label htmlFor="custom-color">Enter your custom color:</label>
           <input
             type="text"
-            id="other-color"
-            name="other-color"
+            id="custom-color"
+            name="custom-color"
             value={otherColor}
             onChange={otherColorHandler}
           />

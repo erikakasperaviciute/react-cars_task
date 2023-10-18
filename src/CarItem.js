@@ -15,7 +15,7 @@ const CarItem = (props) => {
     mileageDiscount,
     discount,
   } = props.data;
-  const { onDelete, onEdit, index } = props;
+  const { onDelete, onEdit } = props;
 
   if (!brand || !model || !basePrice) {
     return null;

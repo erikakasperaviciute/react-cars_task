@@ -17,7 +17,8 @@ function CarsPage() {
     if (editCarData) {
       setCars((prevState) => {
         const editId = newCar.id;
-        const editIndex = cars.findIndex((car) => car.id === editId);
+        // const editIndex = cars.findIndex((car) => car.id === editId);
+        const editIndex = prevState.findIndex((car) => car.id === editId);
         const newState = [...prevState];
         newState[editIndex] = newCar;
         return newState;
