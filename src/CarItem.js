@@ -10,8 +10,7 @@ const CarItem = (props) => {
     mileage,
     color,
     image,
-    additionalEngineCost,
-    additionalColorCost,
+    // additionalColorCost,
     mileageDiscount,
     discount,
   } = props.data;
@@ -20,6 +19,23 @@ const CarItem = (props) => {
   if (!brand || !model || !basePrice) {
     return null;
   }
+
+  let additionalEngineCost = 0;
+  if (engineType.title === "electric") {
+    additionalEngineCost = 10000;
+  } else if (engineType.title === "hybrid") {
+    additionalEngineCost = 7500;
+  } else if (engineType.title === "diesel") {
+    additionalEngineCost = 5000;
+  }
+
+  let additionalColorCost = 0;
+  if (color.name === "special blue") {
+    additionalColorCost = 500;
+  } else if (color.name === "other") {
+    additionalColorCost = 3000;
+  }
+
   let finalPrice = basePrice + additionalEngineCost + additionalColorCost;
 
   if (discount) {
@@ -35,11 +51,9 @@ const CarItem = (props) => {
   const basePriceElement = `Base price: ${basePrice} eur.`;
   const imageElement = image && <img src={image} alt="car" />;
 
-  const carEngineInfo = `Engine type: ${firstLetterUpperCase(
-    engineType
-  )} - ${additionalEngineCost} Eur.`;
+  const carEngineInfo = `Engine type: ${engineType.title} - ${additionalEngineCost} Eur.`;
   const carMileageInfo = `Mileage: ${mileage} km.`;
-  const carColor = `Color: ${color} - ${additionalColorCost} Eur.`;
+  const carColor = `Color: ${color.name} - ${additionalColorCost} Eur.`;
 
   const discountsElement = (mileageDiscount || discount) && (
     <div>

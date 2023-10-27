@@ -1,37 +1,57 @@
-// import { v4 as uuid } from "uuid";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "./config";
+
 const CarForm = (props) => {
   const { onNewCar, editCarData } = props;
 
-  const colorOptions = [
-    "black",
-    "red",
-    "blue",
-    "silver",
-    "white",
-    "special blue",
-    "other",
-  ];
+  // const colorOptions = [
+  //   "black",
+  //   "red",
+  //   "blue",
+  //   "silver",
+  //   "white",
+  //   "special blue",
+  //   "other",
+  // ];
 
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
-  const [engineType, setEngineType] = useState("electric");
+  const [engine, setEngine] = useState("");
+  const [engineTypes, setEngineTypes] = useState([]);
   const [basePrice, setBasePrice] = useState("");
   const [mileage, setMileage] = useState("");
-  const [selectedColor, setSelectedColor] = useState("black");
+  const [selectedColor, setSelectedColor] = useState("");
   const [otherColor, setOtherColor] = useState("");
   const [image, setImage] = useState("");
   const [discount, setDiscount] = useState("");
+  const [colorOptions, setColorOptions] = useState([]);
 
   const colorHandler = (e) => setSelectedColor(e.target.value);
   const otherColorHandler = (e) => setOtherColor(e.target.value);
+
+  useEffect(() => {
+    const getEngineTypes = async () => {
+      const { data } = await axios(`${API_URL}/engineTypes`);
+      setEngineTypes(data);
+      setEngine(data[0].id);
+    };
+
+    const getColors = async () => {
+      const { data } = await axios(`${API_URL}/colors`);
+      setColorOptions(data);
+      setSelectedColor(data[0].id);
+    };
+    getEngineTypes();
+    getColors();
+  }, []);
 
   useEffect(() => {
     if (editCarData) {
       const { otherColor } = editCarData;
       setBrand(editCarData.brand);
       setModel(editCarData.model);
-      setEngineType(editCarData.engineType);
+      setEngine(editCarData.engineTypeId);
       setBasePrice(editCarData.basePrice);
       setMileage(editCarData.mileage);
 
@@ -39,7 +59,7 @@ const CarForm = (props) => {
         setSelectedColor("other");
         setOtherColor(editCarData.color);
       } else {
-        setSelectedColor(editCarData.color);
+        setSelectedColor(editCarData.color.id);
       }
 
       setImage(editCarData.image);
@@ -49,23 +69,7 @@ const CarForm = (props) => {
 
   const newCarHandler = (e) => {
     e.preventDefault();
-    const pickedColor = selectedColor === "other" ? otherColor : selectedColor;
-
-    let additionalEngineCost = 0;
-    if (engineType === "electric") {
-      additionalEngineCost = 10000;
-    } else if (engineType === "hybrid") {
-      additionalEngineCost = 7500;
-    } else if (engineType === "diesel") {
-      additionalEngineCost = 5000;
-    }
-
-    let additionalColorCost = 0;
-    if (selectedColor === "special blue") {
-      additionalColorCost = 500;
-    } else if (selectedColor === "other") {
-      additionalColorCost = 3000;
-    }
+    // const pickedColor = selectedColor === "other" ? otherColor : selectedColor;
 
     let mileageDiscount = 0;
     if (mileage > 400000) {
@@ -81,26 +85,25 @@ const CarForm = (props) => {
     }
 
     const newCar = {
-      // id: editCarData ? editCarData.id : uuid(),
       brand,
       model,
-      engineType,
+      engineTypeId: Number(engine),
+      colorId: Number(selectedColor),
       basePrice,
       mileage,
-      color: pickedColor,
+      // color: pickedColor,
       otherColor: selectedColor === "other",
       image,
-      additionalEngineCost,
-      additionalColorCost,
+      // additionalColorCost,
       mileageDiscount,
       discount,
     };
     setBrand("");
     setModel("");
-    setEngineType("electric");
+    setEngine(engineTypes[0].id);
     setBasePrice("");
     setMileage("");
-    setSelectedColor("black");
+    setSelectedColor(colorOptions[0].id);
     setOtherColor("");
     setImage("");
     setDiscount("");
@@ -109,13 +112,10 @@ const CarForm = (props) => {
   };
   const brandInputHandler = (e) => setBrand(e.target.value);
   const modelInputHandler = (e) => setModel(e.target.value);
-  const engineTypeHandler = (e) => setEngineType(e.target.value);
+  const engineTypeHandler = (e) => setEngine(e.target.value);
   const basePriceInputHandler = (e) => setBasePrice(e.target.valueAsNumber);
   const mileageInputHandler = (e) => setMileage(e.target.valueAsNumber);
-  // const colorHandler = (e) => {
-  //   setSelectedColor(e.target.value);
-  // };
-  // const otherColorHandler = (e) => setOtherColor(e.target.value);
+
   const imageHandler = (e) => setImage(e.target.value);
   const discountInputHandler = (e) => setDiscount(e.target.valueAsNumber);
 
@@ -148,13 +148,14 @@ const CarForm = (props) => {
         <select
           id="engine-type"
           name="engine-type"
-          value={engineType}
+          value={engine}
           onChange={engineTypeHandler}
         >
-          <option value="electric">Electric</option>
-          <option value="hybrid">Hybrid</option>
-          <option value="diesel">Diesel</option>
-          <option value="petrol">Petrol</option>
+          {engineTypes.map((engineType) => (
+            <option value={engineType.id} key={engineType.id}>
+              {engineType.title}
+            </option>
+          ))}
         </select>
       </div>
       <div className="form-control">
@@ -188,9 +189,9 @@ const CarForm = (props) => {
           onChange={colorHandler}
           value={selectedColor}
         >
-          {colorOptions.map((color, index) => (
-            <option key={index} value={color}>
-              {color}
+          {colorOptions.map((color) => (
+            <option key={color.id} value={color.id}>
+              {color.name}
             </option>
           ))}
         </select>

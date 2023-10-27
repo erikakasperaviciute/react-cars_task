@@ -5,13 +5,14 @@ import axios from "axios";
 import { API_URL } from "./config";
 
 function CarsPage() {
-  // const carsData = [];
   const [cars, setCars] = useState([]);
   const [editCarData, setEditCarData] = useState(null);
 
   useEffect(() => {
     const getCars = async () => {
-      const { data } = await axios(`${API_URL}/cars`);
+      const { data } = await axios(
+        `${API_URL}/cars?_sort=id&_order=desc&_expand=engineType&_expand=color`
+      );
       setCars(data);
     };
     getCars();
@@ -19,11 +20,11 @@ function CarsPage() {
 
   const carsUpdateHandler = async (newCar) => {
     if (editCarData) {
-      const { data } = await axios.put(
-        `${API_URL}/cars/${editCarData.id}`,
-        newCar
+      await axios.put(`${API_URL}/cars/${editCarData.id}`, newCar);
+      const { data } = await axios(
+        `${API_URL}/cars/${editCarData.id}?_expand=engineType&_expand=color`
       );
-      console.log(data);
+
       setCars((prevState) => {
         const editId = editCarData.id;
         const editIndex = prevState.findIndex((car) => car.id === editId);
@@ -34,7 +35,10 @@ function CarsPage() {
       setEditCarData(null);
     } else {
       const { data } = await axios.post(`${API_URL}/cars`, newCar);
-      setCars((prevState) => [data, ...prevState]);
+      const carRes = await axios(
+        `${API_URL}/cars/${data.id}?_expand=engineType&_expand=color`
+      );
+      setCars((prevState) => [carRes.data, ...prevState]);
     }
   };
 
@@ -44,22 +48,6 @@ function CarsPage() {
       return prevState.filter((car) => car.id !== carId);
     });
   };
-
-  // const carsUpdateHandler = (newCar) => {
-  //   if (editCarData) {
-  //     setCars((prevState) => {
-  //       const editId = newCar.id;
-  //       // const editIndex = cars.findIndex((car) => car.id === editId);
-  //       const editIndex = prevState.findIndex((car) => car.id === editId);
-  //       const newState = [...prevState];
-  //       newState[editIndex] = newCar;
-  //       return newState;
-  //     });
-  //     setEditCarData(null);
-  //   } else {
-  //     setCars((prevState) => [newCar, ...prevState]);
-  //   }
-  // };
 
   const editCarHandler = (carId) => {
     const carToEdit = cars.find((car) => car.id === carId);

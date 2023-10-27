@@ -3,32 +3,63 @@
     {
       "brand": "Kia",
       "model": "Niro",
-      "engineType": "electric",
-      "basePrice": 11,
+      "engineTypeId": 1,
+      "colorId": 2,
+      "basePrice": 1,
       "mileage": 1,
-      "color": "black",
       "otherColor": false,
       "image": "",
-      "additionalEngineCost": 10000,
-      "additionalColorCost": 0,
       "mileageDiscount": 0.1,
       "discount": "",
       "id": 1
+    }
+  ],
+  "engineTypes": [
+    {
+      "id": 1,
+      "title": "petrol"
     },
     {
-      "brand": "Kia",
-      "model": "Ev6",
-      "engineType": "electric",
-      "basePrice": 5,
-      "mileage": 1,
-      "color": "black",
-      "otherColor": false,
-      "image": "",
-      "additionalEngineCost": 10000,
-      "additionalColorCost": 0,
-      "mileageDiscount": 0.1,
-      "discount": "",
-      "id": 2
+      "id": 2,
+      "title": "electric"
+    },
+    {
+      "id": 3,
+      "title": "hybrid"
+    },
+    {
+      "id": 4,
+      "title": "diesel"
+    }
+  ],
+  "colors": [
+    {
+      "id": 1,
+      "name": "black"
+    },
+    {
+      "id": 2,
+      "name": "red"
+    },
+    {
+      "id": 3,
+      "name": "blue"
+    },
+    {
+      "id": 4,
+      "name": "silver"
+    },
+    {
+      "id": 5,
+      "name": "white"
+    },
+    {
+      "id": 6,
+      "name": "special blue"
+    },
+    {
+      "id": 7,
+      "name": "other"
     }
   ]
 }
