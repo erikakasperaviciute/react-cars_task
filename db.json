@@ -1,0 +1,34 @@
+{
+  "cars": [
+    {
+      "brand": "Kia",
+      "model": "Niro",
+      "engineType": "electric",
+      "basePrice": 11,
+      "mileage": 1,
+      "color": "black",
+      "otherColor": false,
+      "image": "",
+      "additionalEngineCost": 10000,
+      "additionalColorCost": 0,
+      "mileageDiscount": 0.1,
+      "discount": "",
+      "id": 1
+    },
+    {
+      "brand": "Kia",
+      "model": "Ev6",
+      "engineType": "electric",
+      "basePrice": 5,
+      "mileage": 1,
+      "color": "black",
+      "otherColor": false,
+      "image": "",
+      "additionalEngineCost": 10000,
+      "additionalColorCost": 0,
+      "mileageDiscount": 0.1,
+      "discount": "",
+      "id": 2
+    }
+  ]
+}
